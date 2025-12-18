@@ -5,7 +5,7 @@ export const tools: ToolConfig[] = [
   {
     id: 'calculator',
     name: '计算器',
-    category: 'math',
+    category: 'other',
     icon: '🔢',
     component: Calculator,
     route: '/tools/calculator',

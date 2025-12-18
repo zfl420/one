@@ -18,7 +18,6 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   }, {} as Record<string, typeof tools>)
 
   const categoryNames: Record<string, string> = {
-    math: '',
     text: '文本工具',
     convert: '转换工具',
     image: '图像工具',

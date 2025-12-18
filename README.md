@@ -119,7 +119,6 @@ export const tools: ToolConfig[] = [
 
 ## 🎨 工具分类
 
-- `math` - 🔢
 - `text` - 📝 文本工具
 - `convert` - 🔄 转换工具
 - `image` - 🖼️ 图像工具
