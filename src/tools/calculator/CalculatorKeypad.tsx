@@ -4,7 +4,6 @@ interface CalculatorKeypadProps {
   onDecimal: () => void
   onEquals: () => void
   onClear: () => void
-  onClearEntry: () => void
   onDelete: () => void
   onToggleSign: () => void
   onPercent: () => void
@@ -16,7 +15,6 @@ export default function CalculatorKeypad({
   onDecimal,
   onEquals,
   onClear,
-  onClearEntry,
   onDelete,
   onToggleSign,
   onPercent,
@@ -55,7 +53,7 @@ export default function CalculatorKeypad({
       <div className="grid grid-cols-4 gap-3">
         {/* 第一行 */}
         <Button onClick={onClear} variant="function">AC</Button>
-        <Button onClick={onClearEntry} variant="function">CE</Button>
+        <Button onClick={onPercent} variant="function">%</Button>
         <Button onClick={onDelete} variant="function">⌫</Button>
         <Button onClick={() => onOperator('÷')} variant="operator">÷</Button>
 

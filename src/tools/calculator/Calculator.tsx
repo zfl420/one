@@ -18,7 +18,6 @@ export default function Calculator() {
     inputOperator,
     calculate,
     clear,
-    clearEntry,
     deleteDigit,
     toggleSign,
     inputPercent,
@@ -63,7 +62,6 @@ export default function Calculator() {
               onDecimal={inputDecimal}
               onEquals={calculate}
               onClear={clear}
-              onClearEntry={clearEntry}
               onDelete={deleteDigit}
               onToggleSign={toggleSign}
               onPercent={inputPercent}

@@ -5,7 +5,16 @@
       "Bash(npm install:*)",
       "Bash(npm run dev:*)",
       "Bash(git init:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nInitial commit: One 工具网站\n\n✨ 功能特性:\n- 基础项目框架 \\(React + TypeScript + Vite\\)\n- 响应式布局系统 \\(Header + Sidebar + MainLayout\\)\n- 工具注册系统 - 易于扩展\n- 完整的计算器功能\n  - 基础四则运算\n  - 历史记录 \\(LocalStorage\\)\n  - 键盘支持\n  - 现代简约 UI\n\n🎨 Generated with Claude Code\nEOF\n\\)\")",
+      "Bash(git remote add:*)",
+      "Bash(git push:*)",
+      "Bash(git remote get-url:*)",
+      "Bash(vercel --version:*)",
+      "Bash(vercel --prod:*)",
+      "Bash(vercel login)",
+      "Bash(npm run build:*)",
+      "Bash(git commit:*)"
     ]
   }
 }

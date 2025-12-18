@@ -24,7 +24,6 @@ interface CalculatorState {
   inputOperator: (op: string) => void
   calculate: () => void
   clear: () => void
-  clearEntry: () => void
   deleteDigit: () => void
   toggleSign: () => void
   inputPercent: () => void
@@ -148,10 +147,6 @@ export const useCalculatorStore = create<CalculatorState>((set, get) => ({
       operator: null,
       shouldResetDisplay: false,
     })
-  },
-
-  clearEntry: () => {
-    set({ display: '0' })
   },
 
   deleteDigit: () => {
