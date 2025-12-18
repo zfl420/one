@@ -28,32 +28,9 @@ export default function Calculator() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8">
-      <div className="flex items-center justify-between mb-6">
-        <h1 className="text-3xl font-bold text-gray-900">计算器</h1>
-        <button
-          onClick={toggleHistory}
-          className="flex items-center gap-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-colors"
-        >
-          <svg
-            className="w-5 h-5"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-            />
-          </svg>
-          {showHistory ? '隐藏历史' : '显示历史'}
-        </button>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* 计算器主体 */}
-        <div className="w-full max-w-md mx-auto lg:mx-0">
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr,1.2fr] gap-6 items-start">
+        {/* 计算器主体 - 缩小10% */}
+        <div className="w-full max-w-md mx-auto lg:mx-0 scale-90 origin-top">
           <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
             <CalculatorDisplay expression={expression} value={display} />
             <CalculatorKeypad
@@ -67,26 +44,49 @@ export default function Calculator() {
               onPercent={inputPercent}
             />
           </div>
+        </div>
 
-          <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+        {/* 右侧信息面板 */}
+        <div className="w-full space-y-4">
+          {/* 使用说明 */}
+          <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
             <p className="text-sm text-blue-800">
               <strong>键盘快捷键:</strong> 数字键 0-9, 运算符 +−×÷,
               Enter 键计算, Escape 清空, Backspace 删除
             </p>
           </div>
-        </div>
 
-        {/* 历史记录面板 */}
-        {showHistory && (
-          <div className="w-full">
+          {/* 历史记录切换按钮 */}
+          <button
+            onClick={toggleHistory}
+            className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-colors"
+          >
+            <svg
+              className="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            {showHistory ? '隐藏历史' : '显示历史'}
+          </button>
+
+          {/* 历史记录面板 */}
+          {showHistory && (
             <HistoryPanel
               history={history}
               onReplay={replayCalculation}
               onClear={clearHistory}
               onClose={toggleHistory}
             />
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </div>
   )
