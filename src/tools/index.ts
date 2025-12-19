@@ -1,6 +1,7 @@
 import { ToolConfig } from './types'
 import Calculator from './calculator/Calculator'
 import Mortgage from './mortgage/Mortgage'
+import ImageCompressor from './image-compressor/ImageCompressor'
 
 export const tools: ToolConfig[] = [
   {
@@ -20,6 +21,15 @@ export const tools: ToolConfig[] = [
     component: Mortgage,
     route: '/tools/mortgage',
     description: '房贷计算器，支持等额本息和等额本金，含还款计划表和图表分析',
+  },
+  {
+    id: 'image-compressor',
+    name: '图片压缩',
+    category: 'image',
+    icon: '🖼️',
+    component: ImageCompressor,
+    route: '/tools/image-compressor',
+    description: '批量压缩图片，支持多种尺寸调整方式、质量预设、EXIF移除和格式转换',
   },
   // 未来添加新工具只需在此注册
 ]
