@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import MainLayout from './components/Layout/MainLayout'
 import NotFound from './pages/NotFound'
+import Home from './pages/Home'
 import { tools } from './tools'
 
 function App() {
@@ -8,7 +9,7 @@ function App() {
     <Router>
       <MainLayout>
         <Routes>
-          <Route path="/" element={<Navigate to="/tools/calculator" replace />} />
+          <Route path="/" element={<Home />} />
           {tools.map((tool) => (
             <Route
               key={tool.id}
