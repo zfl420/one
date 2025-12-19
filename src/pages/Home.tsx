@@ -11,25 +11,7 @@ export default function Home() {
     return () => clearInterval(timer)
   }, [])
 
-  const formatTime = (date: Date) => {
-    return date.toLocaleString('zh-CN', {
-      timeZone: 'Asia/Shanghai',
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      second: '2-digit',
-      hour12: false,
-    })
-  }
-
   const getTimeComponents = (date: Date) => {
-    const options: Intl.DateTimeFormatOptions = {
-      timeZone: 'Asia/Shanghai',
-      hour12: false,
-    }
-    
     const beijingDate = new Date(date.toLocaleString('en-US', { timeZone: 'Asia/Shanghai' }))
     
     return {

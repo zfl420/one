@@ -11,7 +11,7 @@ export default function EmojiGrid({ categories }: EmojiGridProps) {
   const { selectedSkinTone, addRecentEmoji, showCopySuccess } = useEmojiPickerStore()
   const [hoveredEmoji, setHoveredEmoji] = useState<string | null>(null)
 
-  const handleEmojiClick = async (emoji: string, name: string) => {
+  const handleEmojiClick = async (emoji: string) => {
     // 应用肤色变体（如果支持且已选择）
     let finalEmoji = emoji
     if (selectedSkinTone >= 0 && supportsSkinTone(emoji)) {
@@ -72,7 +72,7 @@ export default function EmojiGrid({ categories }: EmojiGridProps) {
               return (
                 <div key={emojiKey} className="relative">
                   <button
-                    onClick={() => handleEmojiClick(emoji.emoji, emoji.name)}
+                    onClick={() => handleEmojiClick(emoji.emoji)}
                     onMouseEnter={() => setHoveredEmoji(emojiKey)}
                     onMouseLeave={() => setHoveredEmoji(null)}
                     className="w-full aspect-square flex items-center justify-center text-3xl sm:text-4xl hover:bg-gray-100 rounded-lg transition-all hover:scale-110 active:scale-95 cursor-pointer"
