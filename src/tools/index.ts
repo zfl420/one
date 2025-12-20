@@ -1,5 +1,6 @@
 import { ToolConfig } from './types'
 import Calculator from './calculator/Calculator'
+import VehicleIdentifier from './vehicle-identifier/VehicleIdentifier'
 import Mortgage from './mortgage/Mortgage'
 import ImageCompressor from './image-compressor/ImageCompressor'
 import EmojiPicker from './emoji-picker/EmojiPicker'
@@ -13,6 +14,15 @@ export const tools: ToolConfig[] = [
     component: Calculator,
     route: '/tools/calculator',
     description: '基础四则运算计算器，支持键盘输入和历史记录',
+  },
+  {
+    id: 'vehicle-identifier',
+    name: '车型识别',
+    category: 'other',
+    icon: '🚗',
+    component: VehicleIdentifier,
+    route: '/tools/vehicle-identifier',
+    description: '通过VIN码图片识别或手动输入查询车型信息，支持历史记录',
   },
   {
     id: 'mortgage',
