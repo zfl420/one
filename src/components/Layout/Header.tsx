@@ -1,5 +1,7 @@
 import { Layout, Button } from 'antd'
 import { MenuOutlined } from '@ant-design/icons'
+import { Link } from 'react-router-dom'
+import Logo from '../Logo'
 
 const { Header: AntHeader } = Layout
 
@@ -33,6 +35,17 @@ export default function Header({ onToggleSidebar }: HeaderProps) {
           height: 40,
         }}
       />
+      <Link
+        to="/"
+        style={{
+          textDecoration: 'none',
+          marginLeft: 16,
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <Logo size={32} />
+      </Link>
 
       <style>{`
         @media (min-width: 993px) {

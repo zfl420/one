@@ -1,9 +1,10 @@
 import { useNavigate, useLocation, Link } from 'react-router-dom'
-import { Menu, Drawer, Typography, Space } from 'antd'
+import { Menu, Drawer, Typography } from 'antd'
 import type { MenuProps } from 'antd'
 import { useEffect, useRef } from 'react'
 import { tools } from '../../tools'
 import packageJson from '../../../package.json'
+import Logo from '../Logo'
 
 const { Text } = Typography
 
@@ -68,38 +69,14 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       style={{ 
         textDecoration: 'none',
         display: 'block',
-        padding: '20px 24px',
+        padding: '16px 16px',
         borderBottom: '1px solid #f0f0f0',
+        display: 'flex',
+        alignItems: 'center',
       }}
       onClick={onClose}
     >
-      <Space>
-        <div
-          style={{
-            width: 40,
-            height: 40,
-            background: 'linear-gradient(135deg, #1890ff 0%, #52c41a 100%)',
-            borderRadius: 8,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#fff',
-            fontSize: 20,
-            fontWeight: 'bold',
-          }}
-        >
-          O
-        </div>
-        <Text
-          strong
-          style={{
-            fontSize: 24,
-            color: '#000',
-          }}
-        >
-          one
-        </Text>
-      </Space>
+      <Logo size={40} />
     </Link>
   )
 
@@ -107,12 +84,12 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const VersionSection = () => (
     <div
       style={{
-        padding: '16px 24px',
+        padding: '12px 16px',
         borderTop: '1px solid #f0f0f0',
         textAlign: 'center',
       }}
     >
-      <Text type="secondary" style={{ fontSize: 14 }}>
+      <Text type="secondary" style={{ fontSize: 12 }}>
         v{packageJson.version}
       </Text>
     </div>
@@ -147,6 +124,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
             borderRight: 0,
             height: '100%',
           }}
+          inlineIndent={16}
         />
       </div>
       
@@ -167,8 +145,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
           top: 0,
           height: '100vh',
           width: 'fit-content',
-          minWidth: '180px',
-          maxWidth: '280px',
+          minWidth: '160px',
         }}
       >
         {sidebarContent}
