@@ -37,16 +37,6 @@ export default function ImageCompressor() {
 
   return (
     <div style={{ maxWidth: 1400, margin: '0 auto', padding: '32px 16px' }}>
-      {/* 标题 */}
-      <div style={{ marginBottom: 32, textAlign: 'center' }}>
-        <Title level={1} style={{ marginBottom: 8, color: '#faad14' }}>
-          图片压缩工具
-        </Title>
-        <Text type="secondary" style={{ fontSize: 16 }}>
-          批量压缩图片，支持多种尺寸调整方式、质量预设、EXIF移除和格式转换
-        </Text>
-      </div>
-
       <Row gutter={[24, 24]}>
         {/* 左侧：设置面板 */}
         <Col xs={24} lg={8}>

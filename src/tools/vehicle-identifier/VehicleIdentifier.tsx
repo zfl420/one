@@ -1,12 +1,10 @@
-import { Card, Tabs, Alert, Button, Space, Typography } from 'antd'
+import { Card, Tabs, Alert, Button, Space } from 'antd'
 import { HistoryOutlined, InfoCircleOutlined } from '@ant-design/icons'
 import { useVehicleIdentifierStore } from './vehicle-identifier.store'
 import ImageUpload from './ImageUpload'
 import VinInput from './VinInput'
 import ResultDisplay from './ResultDisplay'
 import HistoryPanel from './HistoryPanel'
-
-const { Title, Paragraph } = Typography
 
 export default function VehicleIdentifier() {
   const { inputMode, setInputMode, error, clearError, showHistory, toggleHistory } =
@@ -37,16 +35,6 @@ export default function VehicleIdentifier() {
 
   return (
     <div style={{ maxWidth: 1400, margin: '0 auto', padding: '24px' }}>
-      {/* 页面标题 */}
-      <div style={{ marginBottom: 24 }}>
-        <Title level={2} style={{ marginBottom: 8 }}>
-          车型识别
-        </Title>
-        <Paragraph type="secondary">
-          通过VIN码图片识别或手动输入查询车型信息
-        </Paragraph>
-      </div>
-
       {/* 错误提示 */}
       {error && (
         <Alert

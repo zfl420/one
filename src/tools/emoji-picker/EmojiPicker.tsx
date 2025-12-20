@@ -1,5 +1,5 @@
 import { useEffect, useMemo } from 'react'
-import { Row, Col, Typography } from 'antd'
+import { Row, Col, Card, Typography } from 'antd'
 import { useEmojiPickerStore } from './emoji-picker.store'
 import { emojiCategories, searchEmojis } from './data'
 import SearchBar from './SearchBar'
@@ -9,7 +9,7 @@ import RecentEmojis from './RecentEmojis'
 import EmojiGrid from './EmojiGrid'
 import CopyToast from './CopyToast'
 
-const { Title, Text } = Typography
+const { Text } = Typography
 
 export default function EmojiPicker() {
   const { selectedCategory, searchQuery, loadRecentEmojis } = useEmojiPickerStore()
@@ -36,22 +36,14 @@ export default function EmojiPicker() {
   }, [selectedCategory, searchQuery])
 
   return (
-    <div style={{ minHeight: 'calc(100vh - 64px)', padding: '32px 16px' }}>
+    <div style={{ minHeight: 'calc(100vh - 64px)', padding: '24px 16px' }}>
       <div style={{ maxWidth: 1400, margin: '0 auto' }}>
-        <Row gutter={[24, 24]}>
-          {/* 标题 */}
-          <Col span={24} style={{ textAlign: 'center' }}>
-            <Title level={1} style={{ marginBottom: 8, color: '#1890ff' }}>
-              Emoji 大全
-            </Title>
-            <Text type="secondary" style={{ fontSize: 16 }}>
-              点击emoji即可复制到剪贴板 · 支持搜索、分类浏览和肤色选择
-            </Text>
-          </Col>
-
+        <Row gutter={[16, 16]}>
           {/* 搜索栏 */}
           <Col span={24}>
-            <SearchBar />
+            <Card style={{ borderRadius: 8 }} bodyStyle={{ padding: '20px 24px' }}>
+              <SearchBar />
+            </Card>
           </Col>
 
           {/* 分类导航 */}
@@ -62,7 +54,7 @@ export default function EmojiPicker() {
           )}
 
           {/* 侧边栏：肤色选择器 + 最近使用 */}
-          <Col xs={24} lg={6}>
+          <Col xs={24} sm={24} md={24} lg={6} xl={6}>
             <Row gutter={[16, 16]}>
               <Col span={24}>
                 <SkinTonePicker />
@@ -74,11 +66,13 @@ export default function EmojiPicker() {
           </Col>
 
           {/* 主内容区 */}
-          <Col xs={24} lg={18}>
+          <Col xs={24} sm={24} md={24} lg={18} xl={18}>
             {searchQuery && (
-              <div style={{ marginBottom: 16, fontSize: 14, color: '#666' }}>
-                搜索 "<span style={{ fontWeight: 600, color: '#1890ff' }}>{searchQuery}</span>" 的结果
-              </div>
+              <Card style={{ marginBottom: 16, borderRadius: 8 }} bodyStyle={{ padding: '12px 24px' }}>
+                <Text type="secondary" style={{ fontSize: 14 }}>
+                  搜索 "<Text strong style={{ color: '#1890ff' }}>{searchQuery}</Text>" 的结果
+                </Text>
+              </Card>
             )}
             <EmojiGrid categories={displayedCategories} />
           </Col>

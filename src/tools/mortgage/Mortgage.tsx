@@ -4,21 +4,11 @@ import ResultSummary from './ResultSummary'
 import RepaymentTable from './RepaymentTable'
 import RepaymentChart from './RepaymentChart'
 
-const { Title, Text } = Typography
+const { Title } = Typography
 
 export default function Mortgage() {
   return (
     <div style={{ maxWidth: 1400, margin: '0 auto', padding: '32px 16px' }}>
-      {/* 页面标题 */}
-      <div style={{ marginBottom: 32, textAlign: 'center' }}>
-        <Title level={1} style={{ marginBottom: 8, color: '#52c41a' }}>
-          房贷计算器
-        </Title>
-        <Text type="secondary" style={{ fontSize: 16 }}>
-          精确计算房贷月供、总利息，支持等额本息和等额本金两种还款方式
-        </Text>
-      </div>
-
       <Row gutter={[24, 24]}>
         {/* 左侧：输入表单 */}
         <Col xs={24} lg={8}>
