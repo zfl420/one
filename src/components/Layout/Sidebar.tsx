@@ -68,10 +68,9 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       to="/" 
       style={{ 
         textDecoration: 'none',
-        display: 'block',
+        display: 'flex',
         padding: '16px 16px',
         borderBottom: '1px solid #f0f0f0',
-        display: 'flex',
         alignItems: 'center',
       }}
       onClick={onClose}
