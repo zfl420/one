@@ -1,10 +1,13 @@
-import { useRef, useState, DragEvent } from 'react'
+import { useState } from 'react'
+import { Upload, Button, Space, Alert, Image, Typography } from 'antd'
+import { InboxOutlined, LoadingOutlined } from '@ant-design/icons'
+import type { UploadFile } from 'antd/es/upload/interface'
 import { useVehicleIdentifierStore } from './vehicle-identifier.store'
 
-export default function ImageUpload() {
-  const fileInputRef = useRef<HTMLInputElement>(null)
-  const [isDragging, setIsDragging] = useState(false)
+const { Dragger } = Upload
+const { Text } = Typography
 
+export default function ImageUpload() {
   const {
     uploadedImage,
     imagePreviewUrl,
@@ -13,46 +16,37 @@ export default function ImageUpload() {
     recognizeByImage,
   } = useVehicleIdentifierStore()
 
-  const handleFileSelect = (file: File | null) => {
-    if (file) {
-      setUploadedImage(file)
+  const [fileList, setFileList] = useState<UploadFile[]>([])
+
+  const handleBeforeUpload = (file: File) => {
+    // 检查文件类型
+    const isImage = file.type.startsWith('image/')
+    if (!isImage) {
+      return Upload.LIST_IGNORE
     }
-  }
 
-  const handleFileInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null
-    handleFileSelect(file)
-  }
-
-  const handleDragOver = (e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault()
-    setIsDragging(true)
-  }
-
-  const handleDragLeave = (e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault()
-    setIsDragging(false)
-  }
-
-  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault()
-    setIsDragging(false)
-
-    const file = e.dataTransfer.files?.[0]
-    if (file && file.type.startsWith('image/')) {
-      handleFileSelect(file)
+    // 检查文件大小（4MB）
+    const isLt4M = file.size / 1024 / 1024 < 4
+    if (!isLt4M) {
+      return Upload.LIST_IGNORE
     }
+
+    setUploadedImage(file)
+    setFileList([
+      {
+        uid: '-1',
+        name: file.name,
+        status: 'done',
+        url: URL.createObjectURL(file),
+      },
+    ])
+
+    return false // 阻止自动上传
   }
 
-  const handleClickUpload = () => {
-    fileInputRef.current?.click()
-  }
-
-  const handleClearImage = () => {
+  const handleRemove = () => {
     setUploadedImage(null)
-    if (fileInputRef.current) {
-      fileInputRef.current.value = ''
-    }
+    setFileList([])
   }
 
   const handleRecognize = () => {
@@ -60,134 +54,82 @@ export default function ImageUpload() {
   }
 
   return (
-    <div className="space-y-4">
+    <Space direction="vertical" size="large" style={{ width: '100%' }}>
       {/* 上传区域 */}
-      <div
-        className={`
-          relative border-2 border-dashed rounded-lg p-8 text-center
-          transition-colors cursor-pointer
-          ${
-            isDragging
-              ? 'border-primary-500 bg-primary-50'
-              : 'border-gray-300 hover:border-primary-400'
-          }
-          ${uploadedImage ? 'bg-gray-50' : 'bg-white'}
-        `}
-        onDragOver={handleDragOver}
-        onDragLeave={handleDragLeave}
-        onDrop={handleDrop}
-        onClick={!uploadedImage ? handleClickUpload : undefined}
-      >
-        <input
-          ref={fileInputRef}
-          type="file"
+      {!uploadedImage ? (
+        <Dragger
+          name="file"
+          multiple={false}
           accept="image/jpeg,image/jpg,image/png,image/bmp"
-          onChange={handleFileInputChange}
-          className="hidden"
-        />
-
-        {!uploadedImage ? (
-          <div className="space-y-3">
-            <svg
-              className="mx-auto h-12 w-12 text-gray-400"
-              stroke="currentColor"
-              fill="none"
-              viewBox="0 0 48 48"
-            >
-              <path
-                d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02"
-                strokeWidth={2}
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            <div className="text-gray-600">
-              <p className="text-base font-medium">点击上传或拖拽图片到此处</p>
-              <p className="text-sm text-gray-500 mt-1">
+          beforeUpload={handleBeforeUpload}
+          fileList={fileList}
+          showUploadList={false}
+        >
+          <p className="ant-upload-drag-icon">
+            <InboxOutlined style={{ fontSize: 48, color: '#1890ff' }} />
+          </p>
+          <p className="ant-upload-text" style={{ fontSize: 16 }}>
+            点击或拖拽图片到此区域上传
+          </p>
+          <p className="ant-upload-hint" style={{ color: '#999' }}>
                 支持 JPG、PNG、BMP 格式，大小不超过 4MB
               </p>
-            </div>
-          </div>
+        </Dragger>
         ) : (
-          <div className="space-y-3">
+        <div style={{ textAlign: 'center' }}>
             {/* 图片预览 */}
             {imagePreviewUrl && (
-              <div className="relative inline-block max-w-full">
-                <img
+            <div style={{ marginBottom: 16 }}>
+              <Image
                   src={imagePreviewUrl}
                   alt="预览"
-                  className="max-h-64 mx-auto rounded-lg shadow-md"
+                style={{ maxHeight: 300, borderRadius: 8 }}
                 />
               </div>
             )}
             {/* 文件信息 */}
-            <div className="text-sm text-gray-600">
-              <p className="font-medium">{uploadedImage.name}</p>
-              <p className="text-gray-500">
+          <div style={{ marginBottom: 16 }}>
+            <Text strong>{uploadedImage.name}</Text>
+            <br />
+            <Text type="secondary">
                 {(uploadedImage.size / 1024).toFixed(2)} KB
-              </p>
+            </Text>
             </div>
           </div>
         )}
-      </div>
 
       {/* 操作按钮 */}
-      <div className="flex gap-3">
         {uploadedImage && (
-          <>
-            <button
+        <Space style={{ width: '100%' }} size="middle">
+          <Button
+            type="primary"
               onClick={handleRecognize}
               disabled={isLoading}
-              className="flex-1 px-6 py-3 bg-primary-500 hover:bg-primary-600 disabled:bg-gray-300 text-white font-medium rounded-lg transition-colors"
-            >
-              {isLoading ? (
-                <span className="flex items-center justify-center gap-2">
-                  <svg
-                    className="animate-spin h-5 w-5"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    />
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    />
-                  </svg>
-                  识别中...
-                </span>
-              ) : (
-                '开始识别'
-              )}
-            </button>
-            <button
-              onClick={handleClearImage}
-              disabled={isLoading}
-              className="px-6 py-3 bg-gray-200 hover:bg-gray-300 disabled:bg-gray-100 text-gray-700 font-medium rounded-lg transition-colors"
-            >
+            icon={isLoading ? <LoadingOutlined /> : undefined}
+            block
+            size="large"
+          >
+            {isLoading ? '识别中...' : '开始识别'}
+          </Button>
+          <Button onClick={handleRemove} disabled={isLoading} size="large">
               清除
-            </button>
-          </>
+          </Button>
+        </Space>
         )}
-      </div>
 
       {/* 提示信息 */}
-      <div className="text-sm text-gray-500 space-y-1">
-        <p>💡 提示：</p>
-        <ul className="list-disc list-inside space-y-1 ml-2">
-          <li>请确保VIN码清晰可见</li>
-          <li>建议使用高清图片以提高识别准确率</li>
-          <li>VIN码通常位于车辆铭牌或挡风玻璃下方</li>
+      <Alert
+        message="提示"
+        description={
+          <ul style={{ paddingLeft: 20, margin: 0 }}>
+            <li>请确保VIN码清晰可见</li>
+            <li>建议使用高清图片以提高识别准确率</li>
+            <li>VIN码通常位于车辆铭牌或挡风玻璃下方</li>
         </ul>
-      </div>
-    </div>
+        }
+        type="warning"
+        showIcon
+      />
+    </Space>
   )
 }
-

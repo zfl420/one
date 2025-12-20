@@ -2,11 +2,35 @@
 
 > 最后更新时间: 2025-12-20
 
+## v0.0.4-20251220-fix (2025年12月20日)
+
+**标签**: `v0.0.4-20251220-fix`  
+**提交**: 待提交  
+**状态**: ✅ 当前稳定版本
+
+### 更新内容
+- 🐛 修复车型识别功能UI错位问题
+  - 将车型识别组件从 Tailwind CSS 类名改为使用 Ant Design 组件
+  - 重写 VehicleIdentifier.tsx 主组件，使用 Card、Tabs、Alert 等组件
+  - 重写 ImageUpload.tsx，使用 Upload.Dragger 组件实现拖拽上传
+  - 重写 VinInput.tsx，使用 Ant Design 表单组件
+  - 重写 ResultDisplay.tsx，使用 Card 和 Descriptions 组件展示结果
+  - 重写 HistoryPanel.tsx，使用 List 组件展示历史记录
+  - 保持所有业务逻辑和功能不变，仅优化UI展示
+  - 解决因未配置 Tailwind CSS 导致的样式不生效问题
+
+### 技术改进
+- 统一使用 Ant Design 组件库，提升UI一致性和可维护性
+- 优化组件布局和交互体验
+- 所有功能测试通过，无 linter 错误
+
+---
+
 ## v0.0.4-20251220 (2025年12月20日)
 
 **标签**: `v0.0.4-20251220`  
 **提交**: `55a2372`  
-**状态**: ✅ 当前稳定版本
+**状态**: ✅ 稳定版本
 
 ### 更新内容
 - 样式系统重构，从 Tailwind CSS 迁移到 Ant Design
