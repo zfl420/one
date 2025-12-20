@@ -1,6 +1,10 @@
+import { Card, Button, Space, Tag, Image, Typography } from 'antd'
+import { DownloadOutlined, DeleteOutlined, CheckCircleOutlined, CloseCircleOutlined, LoadingOutlined } from '@ant-design/icons'
 import { ImageFile } from './types'
 import { formatFileSize, downloadBlob, generateCompressedFilename } from './utils'
 import { useImageCompressorStore } from './image-compressor.store'
+
+const { Text } = Typography
 
 interface ImageCardProps {
   image: ImageFile
@@ -22,112 +26,105 @@ export default function ImageCard({ image }: ImageCardProps) {
     return ratio.toFixed(1)
   }
 
-  const getStatusBadge = () => {
+  const getStatusTag = () => {
     switch (image.status) {
       case 'pending':
-        return (
-          <span className="px-2 py-1 text-xs font-medium rounded-full bg-gray-100 text-gray-600">
-            待处理
-          </span>
-        )
+        return <Tag>待处理</Tag>
       case 'processing':
         return (
-          <span className="px-2 py-1 text-xs font-medium rounded-full bg-blue-100 text-blue-600 flex items-center gap-1">
-            <svg className="animate-spin h-3 w-3" viewBox="0 0 24 24">
-              <circle
-                className="opacity-25"
-                cx="12"
-                cy="12"
-                r="10"
-                stroke="currentColor"
-                strokeWidth="4"
-                fill="none"
-              />
-              <path
-                className="opacity-75"
-                fill="currentColor"
-                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-              />
-            </svg>
+          <Tag icon={<LoadingOutlined />} color="processing">
             处理中
-          </span>
+          </Tag>
         )
       case 'done':
         return (
-          <span className="px-2 py-1 text-xs font-medium rounded-full bg-green-100 text-green-600">
-            ✓ 完成
-          </span>
+          <Tag icon={<CheckCircleOutlined />} color="success">
+            完成
+          </Tag>
         )
       case 'error':
         return (
-          <span className="px-2 py-1 text-xs font-medium rounded-full bg-red-100 text-red-600">
-            ✗ 失败
-          </span>
+          <Tag icon={<CloseCircleOutlined />} color="error">
+            失败
+          </Tag>
         )
     }
   }
 
   return (
-    <div className="bg-white rounded-lg border border-gray-200 overflow-hidden hover:shadow-md transition-shadow">
-      <div className="flex gap-4 p-4">
+    <Card 
+      style={{ borderRadius: 8 }}
+      bodyStyle={{ padding: 20 }}
+    >
+      <div style={{ display: 'flex', gap: 20 }}>
         {/* 缩略图 */}
-        <div className="flex-shrink-0">
-          <img
+        <div style={{ flexShrink: 0 }}>
+          <Image
             src={image.preview}
             alt={image.file.name}
-            className="w-24 h-24 object-cover rounded"
+            width={112}
+            height={112}
+            style={{ 
+              objectFit: 'cover', 
+              borderRadius: 8,
+            }}
+            preview={image.status === 'done' && image.compressedBlob ? {
+              src: URL.createObjectURL(image.compressedBlob),
+            } : false}
           />
         </div>
 
         {/* 信息区域 */}
-        <div className="flex-1 min-w-0">
+        <div style={{ flex: 1, minWidth: 0 }}>
           {/* 文件名和状态 */}
-          <div className="flex items-start justify-between gap-2 mb-2">
-            <h3 className="text-sm font-medium text-gray-900 truncate flex-1">
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
+            <Text strong ellipsis style={{ flex: 1, marginRight: 8 }}>
               {image.file.name}
-            </h3>
-            {getStatusBadge()}
+            </Text>
+            {getStatusTag()}
           </div>
 
           {/* 尺寸信息 */}
-          <div className="text-xs text-gray-500 space-y-1">
-            <div>原始大小: {formatFileSize(image.originalSize)}</div>
+          <Space direction="vertical" size="small" style={{ width: '100%' }}>
+            <Text type="secondary">原始大小: {formatFileSize(image.originalSize)}</Text>
             {image.compressedSize && (
-              <div className="flex items-center gap-2">
-                <span>压缩后: {formatFileSize(image.compressedSize)}</span>
-                <span className="px-1.5 py-0.5 rounded bg-green-100 text-green-700 font-medium">
+              <div>
+                <Text type="secondary">压缩后: {formatFileSize(image.compressedSize)}</Text>
+                <Tag color="success" style={{ marginLeft: 8 }}>
                   减少 {getCompressionRatio()}%
-                </span>
+                </Tag>
               </div>
             )}
-          </div>
+          </Space>
 
           {/* 错误信息 */}
           {image.error && (
-            <div className="mt-2 text-xs text-red-600">
+            <Text type="danger" style={{ display: 'block', marginTop: 8 }}>
               {image.error}
-            </div>
+            </Text>
           )}
 
           {/* 操作按钮 */}
-          <div className="flex gap-2 mt-3">
+          <Space style={{ marginTop: 16 }}>
             {image.status === 'done' && (
-              <button
+              <Button
+                type="primary"
+                icon={<DownloadOutlined />}
                 onClick={handleDownload}
-                className="px-3 py-1 text-xs font-medium text-white bg-blue-500 rounded hover:bg-blue-600 transition-colors"
+                style={{ background: '#faad14', borderColor: '#faad14' }}
               >
                 下载
-              </button>
+              </Button>
             )}
-            <button
+            <Button
+              icon={<DeleteOutlined />}
               onClick={() => removeImage(image.id)}
-              className="px-3 py-1 text-xs font-medium text-gray-700 bg-gray-100 rounded hover:bg-gray-200 transition-colors"
             >
               删除
-            </button>
-          </div>
+            </Button>
+          </Space>
         </div>
       </div>
-    </div>
+    </Card>
   )
 }

@@ -1,4 +1,8 @@
 import { useState, useEffect } from 'react'
+import { Card, Typography, Space, Divider } from 'antd'
+import { ClockCircleOutlined } from '@ant-design/icons'
+
+const { Title, Text } = Typography
 
 export default function Home() {
   const [currentTime, setCurrentTime] = useState(new Date())
@@ -35,40 +39,73 @@ export default function Home() {
   const { date, time, weekday } = getTimeComponents(currentTime)
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center p-4">
-      <div className="max-w-4xl w-full">
-        <div className="text-center space-y-8">
+    <div
+      style={{
+        minHeight: 'calc(100vh - 64px)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '24px',
+      }}
+    >
+      <div style={{ maxWidth: 900, width: '100%' }}>
+        <Space direction="vertical" size="large" style={{ width: '100%', textAlign: 'center' }}>
           {/* 欢迎信息 */}
-          <div className="space-y-4">
-            <h1 className="text-5xl md:text-6xl font-bold">
-              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">one</span>
-            </h1>
-          </div>
+          <Space direction="vertical" size="middle">
+            <Title
+              level={1}
+              style={{
+                fontSize: 72,
+                margin: 0,
+                color: '#ff0000',
+              }}
+            >
+              one
+            </Title>
+            <Text type="secondary" style={{ fontSize: 20 }}>
+              简洁、优雅、现代
+            </Text>
+          </Space>
 
           {/* 北京时间显示 */}
-          <div className="bg-white rounded-2xl shadow-xl p-8 md:p-12 space-y-6 border border-gray-100">
-            <div className="flex items-center justify-center gap-2 text-gray-500">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-              <span className="text-sm font-medium">北京时间</span>
-            </div>
-            
-            <div className="space-y-4">
-              {/* 时间 */}
-              <div className="text-6xl md:text-7xl font-bold text-gray-900 tabular-nums tracking-tight">
-                {time}
-              </div>
-              
-              {/* 日期和星期 */}
-              <div className="flex items-center justify-center gap-3 text-gray-600">
-                <span className="text-xl font-medium">{date}</span>
-                <span className="text-gray-300">|</span>
-                <span className="text-xl font-medium">{weekday}</span>
-              </div>
-            </div>
-          </div>
-        </div>
+          <Card
+            style={{
+              padding: '48px 24px',
+              borderRadius: 16,
+              boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+            }}
+          >
+            <Space direction="vertical" size="large" style={{ width: '100%' }}>
+              <Space>
+                <ClockCircleOutlined style={{ fontSize: 24, color: '#1890ff' }} />
+                <Text strong style={{ fontSize: 16, color: '#1890ff' }}>
+                  北京时间
+                </Text>
+              </Space>
+
+              <Space direction="vertical" size="middle" style={{ width: '100%' }}>
+                {/* 时间 */}
+                <div
+                  style={{
+                    fontSize: 72,
+                    fontWeight: 'bold',
+                    color: '#000',
+                    fontVariantNumeric: 'tabular-nums',
+                    letterSpacing: '-2px',
+                  }}
+                >
+                  {time}
+                </div>
+
+                {/* 日期和星期 */}
+                <Space split={<Divider type="vertical" />}>
+                  <Text style={{ fontSize: 24, color: '#666' }}>{date}</Text>
+                  <Text style={{ fontSize: 24, color: '#666' }}>{weekday}</Text>
+                </Space>
+              </Space>
+            </Space>
+          </Card>
+        </Space>
       </div>
     </div>
   )

@@ -1,15 +1,27 @@
 import { useState } from 'react'
+import { Card, Table, Space, Pagination, Typography } from 'antd'
+import { TableOutlined, DownOutlined, UpOutlined } from '@ant-design/icons'
+import type { ColumnsType } from 'antd/es/table'
 import { useMortgageStore } from './mortgage.store'
 import { formatCurrency } from './utils'
+
+const { Text } = Typography
+
+interface RepaymentRecord {
+  period: number
+  monthlyPayment: number
+  principal: number
+  interest: number
+  remainingPrincipal: number
+}
 
 export default function RepaymentTable() {
   const { schedule, showTable, toggleTable } = useMortgageStore()
   const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 12 // 每页显示12个月（1年）
+  const pageSize = 12 // 每页显示12个月（1年）
 
-  const totalPages = Math.ceil(schedule.length / itemsPerPage)
-  const startIndex = (currentPage - 1) * itemsPerPage
-  const endIndex = startIndex + itemsPerPage
+  const startIndex = (currentPage - 1) * pageSize
+  const endIndex = startIndex + pageSize
   const currentData = schedule.slice(startIndex, endIndex)
 
   // 计算当前页年度汇总
@@ -22,145 +34,121 @@ export default function RepaymentTable() {
     { monthlyPayment: 0, principal: 0, interest: 0 }
   )
 
+  const columns: ColumnsType<RepaymentRecord> = [
+    {
+      title: '期数',
+      dataIndex: 'period',
+      key: 'period',
+      width: 80,
+      align: 'center',
+    },
+    {
+      title: '月供（元）',
+      dataIndex: 'monthlyPayment',
+      key: 'monthlyPayment',
+      align: 'right',
+      render: (value: number) => formatCurrency(value),
+    },
+    {
+      title: '本金（元）',
+      dataIndex: 'principal',
+      key: 'principal',
+      align: 'right',
+      render: (value: number) => (
+        <Text style={{ color: '#52c41a', fontWeight: 600 }}>
+          {formatCurrency(value)}
+        </Text>
+      ),
+    },
+    {
+      title: '利息（元）',
+      dataIndex: 'interest',
+      key: 'interest',
+      align: 'right',
+      render: (value: number) => (
+        <Text style={{ color: '#fa8c16', fontWeight: 600 }}>
+          {formatCurrency(value)}
+        </Text>
+      ),
+    },
+    {
+      title: '剩余本金（元）',
+      dataIndex: 'remainingPrincipal',
+      key: 'remainingPrincipal',
+      align: 'right',
+      render: (value: number) => formatCurrency(value),
+    },
+  ]
+
   return (
-    <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-      {/* 标题栏 */}
-      <div
-        className="px-6 py-4 bg-gradient-to-r from-primary-500 to-primary-600 text-white cursor-pointer flex items-center justify-between"
-        onClick={toggleTable}
-      >
-        <h3 className="text-lg font-semibold">还款计划明细</h3>
-        <svg
-          className={`w-6 h-6 transition-transform ${showTable ? 'rotate-180' : ''}`}
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M19 9l-7 7-7-7"
-          />
-        </svg>
-      </div>
-
-      {/* 表格内容 */}
+    <Card
+      title={
+        <Space>
+          <TableOutlined />
+          <span>还款计划明细</span>
+        </Space>
+      }
+      extra={
+        <span onClick={toggleTable} style={{ cursor: 'pointer' }}>
+          {showTable ? <UpOutlined /> : <DownOutlined />}
+        </span>
+      }
+      style={{ borderRadius: 8 }}
+    >
       {showTable && (
-        <div className="p-6">
-          {/* 分页信息 */}
-          <div className="mb-4 flex items-center justify-between">
-            <p className="text-sm text-gray-600">
+        <div>
+          <div style={{ marginBottom: 16, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Text type="secondary">
               第 {currentPage} 年（第 {startIndex + 1}-{Math.min(endIndex, schedule.length)} 期）
-            </p>
-            <div className="text-sm text-gray-600">
-              共 {schedule.length} 期
-            </div>
+            </Text>
+            <Text type="secondary">共 {schedule.length} 期</Text>
           </div>
 
-          {/* 表格 */}
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="bg-gray-50 border-b-2 border-gray-200">
-                  <th className="px-4 py-3 text-left font-semibold text-gray-700">
-                    期数
-                  </th>
-                  <th className="px-4 py-3 text-right font-semibold text-gray-700">
-                    月供（元）
-                  </th>
-                  <th className="px-4 py-3 text-right font-semibold text-gray-700">
-                    本金（元）
-                  </th>
-                  <th className="px-4 py-3 text-right font-semibold text-gray-700">
-                    利息（元）
-                  </th>
-                  <th className="px-4 py-3 text-right font-semibold text-gray-700">
-                    剩余本金（元）
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {currentData.map((record, index) => (
-                  <tr
-                    key={record.period}
-                    className={`border-b border-gray-100 hover:bg-gray-50 ${
-                      index % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'
-                    }`}
-                  >
-                    <td className="px-4 py-3 text-gray-700 font-medium">
-                      {record.period}
-                    </td>
-                    <td className="px-4 py-3 text-right text-gray-900">
-                      {formatCurrency(record.monthlyPayment)}
-                    </td>
-                    <td className="px-4 py-3 text-right text-blue-600">
-                      {formatCurrency(record.principal)}
-                    </td>
-                    <td className="px-4 py-3 text-right text-orange-600">
-                      {formatCurrency(record.interest)}
-                    </td>
-                    <td className="px-4 py-3 text-right text-gray-700">
-                      {formatCurrency(record.remainingPrincipal)}
-                    </td>
-                  </tr>
-                ))}
-                {/* 年度汇总行 */}
-                <tr className="bg-primary-50 border-t-2 border-primary-200 font-semibold">
-                  <td className="px-4 py-3 text-gray-700">年度小计</td>
-                  <td className="px-4 py-3 text-right text-gray-900">
+          <Table
+            columns={columns}
+            dataSource={currentData}
+            pagination={false}
+            rowKey="period"
+            size="middle"
+            summary={() => (
+              <Table.Summary fixed>
+                <Table.Summary.Row style={{ background: '#f0f9ff', fontWeight: 'bold' }}>
+                  <Table.Summary.Cell index={0} align="center">
+                    年度小计
+                  </Table.Summary.Cell>
+                  <Table.Summary.Cell index={1} align="right">
                     {formatCurrency(pageSummary.monthlyPayment)}
-                  </td>
-                  <td className="px-4 py-3 text-right text-blue-600">
-                    {formatCurrency(pageSummary.principal)}
-                  </td>
-                  <td className="px-4 py-3 text-right text-orange-600">
-                    {formatCurrency(pageSummary.interest)}
-                  </td>
-                  <td className="px-4 py-3 text-right text-gray-700">-</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+                  </Table.Summary.Cell>
+                  <Table.Summary.Cell index={2} align="right">
+                    <Text style={{ color: '#52c41a', fontWeight: 600 }}>
+                      {formatCurrency(pageSummary.principal)}
+                    </Text>
+                  </Table.Summary.Cell>
+                  <Table.Summary.Cell index={3} align="right">
+                    <Text style={{ color: '#fa8c16', fontWeight: 600 }}>
+                      {formatCurrency(pageSummary.interest)}
+                    </Text>
+                  </Table.Summary.Cell>
+                  <Table.Summary.Cell index={4} align="right">
+                    -
+                  </Table.Summary.Cell>
+                </Table.Summary.Row>
+              </Table.Summary>
+            )}
+          />
 
-          {/* 分页控件 */}
-          {totalPages > 1 && (
-            <div className="mt-6 flex items-center justify-center gap-2">
-              <button
-                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-                disabled={currentPage === 1}
-                className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                上一年
-              </button>
-              <div className="flex gap-1">
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map(
-                  (page) => (
-                    <button
-                      key={page}
-                      onClick={() => setCurrentPage(page)}
-                      className={`w-10 h-10 rounded-lg font-medium transition-colors ${
-                        currentPage === page
-                          ? 'bg-primary-500 text-white'
-                          : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                      }`}
-                    >
-                      {page}
-                    </button>
-                  )
-                )}
-              </div>
-              <button
-                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
-                disabled={currentPage === totalPages}
-                className="px-4 py-2 rounded-lg bg-gray-100 text-gray-700 hover:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                下一年
-              </button>
-            </div>
-          )}
+          <div style={{ marginTop: 24, textAlign: 'center' }}>
+            <Pagination
+              current={currentPage}
+              pageSize={pageSize}
+              total={schedule.length}
+              onChange={setCurrentPage}
+              showSizeChanger={false}
+              showQuickJumper
+            />
+          </div>
         </div>
       )}
-    </div>
+    </Card>
   )
 }

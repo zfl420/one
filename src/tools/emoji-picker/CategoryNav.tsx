@@ -1,3 +1,4 @@
+import { Space, Button } from 'antd'
 import { EmojiCategory } from './types'
 import { useEmojiPickerStore } from './emoji-picker.store'
 
@@ -9,31 +10,27 @@ export default function CategoryNav({ categories }: CategoryNavProps) {
   const { selectedCategory, setSelectedCategory } = useEmojiPickerStore()
 
   return (
-    <div className="flex flex-wrap gap-2 p-4 bg-gray-50 rounded-lg border border-gray-200">
-      <button
+    <Space wrap size="small" style={{ justifyContent: 'center', width: '100%' }}>
+      <Button
+        type={selectedCategory === null ? 'primary' : 'default'}
+        size="large"
         onClick={() => setSelectedCategory(null)}
-        className={`px-4 py-2 rounded-lg font-medium transition-all ${
-          selectedCategory === null
-            ? 'bg-blue-500 text-white shadow-md'
-            : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'
-        }`}
+        style={{ borderRadius: 8 }}
       >
         全部
-      </button>
+      </Button>
       {categories.map((category) => (
-        <button
+        <Button
           key={category.id}
+          type={selectedCategory === category.id ? 'primary' : 'default'}
+          size="large"
           onClick={() => setSelectedCategory(category.id)}
-          className={`px-4 py-2 rounded-lg font-medium transition-all flex items-center gap-2 ${
-            selectedCategory === category.id
-              ? 'bg-blue-500 text-white shadow-md'
-              : 'bg-white text-gray-700 hover:bg-gray-100 border border-gray-300'
-          }`}
+          style={{ borderRadius: 8 }}
         >
-          <span className="text-xl">{category.icon}</span>
-          <span>{category.name}</span>
-        </button>
+          <span style={{ fontSize: 20, marginRight: 8 }}>{category.icon}</span>
+          {category.name}
+        </Button>
       ))}
-    </div>
+    </Space>
   )
 }

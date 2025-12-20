@@ -1,6 +1,9 @@
 import { useState } from 'react'
+import { Layout } from 'antd'
 import Header from './Header'
 import Sidebar from './Sidebar'
+
+const { Content } = Layout
 
 interface MainLayoutProps {
   children: React.ReactNode
@@ -13,16 +16,19 @@ export default function MainLayout({ children }: MainLayoutProps) {
   const closeSidebar = () => setIsSidebarOpen(false)
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <Layout style={{ minHeight: '100vh' }}>
       <Header onToggleSidebar={toggleSidebar} />
-      <div className="flex">
+      <Layout>
         <Sidebar isOpen={isSidebarOpen} onClose={closeSidebar} />
-        <main className="flex-1 lg:ml-0">
-          <div className="min-h-[calc(100vh-4rem)]">
-            {children}
-          </div>
-        </main>
-      </div>
-    </div>
+        <Content
+          style={{
+            minHeight: 'calc(100vh - 64px)',
+            background: '#f0f2f5',
+          }}
+        >
+          {children}
+        </Content>
+      </Layout>
+    </Layout>
   )
 }

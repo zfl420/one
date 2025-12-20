@@ -5,12 +5,36 @@ interface CalculatorDisplayProps {
 
 export default function CalculatorDisplay({ expression, value }: CalculatorDisplayProps) {
   return (
-    <div className="bg-gray-900 text-white p-6 rounded-t-2xl">
-      <div className="text-right">
-        <div className="text-gray-400 text-sm h-6 mb-2 overflow-x-auto">
+    <div
+      style={{
+        background: 'linear-gradient(135deg, #1890ff 0%, #096dd9 100%)',
+        color: '#fff',
+        padding: '40px 32px',
+        borderRadius: '16px 16px 0 0',
+      }}
+    >
+      <div style={{ textAlign: 'right' }}>
+        <div
+          style={{
+            color: 'rgba(255, 255, 255, 0.7)',
+            fontSize: 16,
+            height: 28,
+            marginBottom: 16,
+            overflow: 'auto',
+            fontWeight: 500,
+          }}
+        >
           {expression || '\u00A0'}
         </div>
-        <div className="text-4xl font-light overflow-x-auto">
+        <div
+          style={{
+            fontSize: 56,
+            fontWeight: 'bold',
+            overflow: 'auto',
+            fontVariantNumeric: 'tabular-nums',
+            letterSpacing: '-1px',
+          }}
+        >
           {value}
         </div>
       </div>

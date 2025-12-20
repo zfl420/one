@@ -1,3 +1,5 @@
+import { Row, Col, Card, Button, Alert } from 'antd'
+import { HistoryOutlined } from '@ant-design/icons'
 import { useCalculatorStore } from './calculator.store'
 import { useKeyboard } from './useKeyboard'
 import CalculatorDisplay from './CalculatorDisplay'
@@ -27,11 +29,19 @@ export default function Calculator() {
   } = useCalculatorStore()
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr,1.2fr] gap-6 items-start">
-        {/* 计算器主体 - 缩小10% */}
-        <div className="w-full max-w-md mx-auto lg:mx-0 scale-90 origin-top">
-          <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
+    <div style={{ maxWidth: 1400, margin: '0 auto', padding: '32px 16px' }}>
+      <Row gutter={[24, 24]}>
+        {/* 计算器主体 */}
+        <Col xs={24} lg={10}>
+          <Card
+            bordered={false}
+            style={{
+              borderRadius: 16,
+              overflow: 'hidden',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+            }}
+            bodyStyle={{ padding: 0 }}
+          >
             <CalculatorDisplay expression={expression} value={display} />
             <CalculatorKeypad
               onDigit={inputDigit}
@@ -43,51 +53,54 @@ export default function Calculator() {
               onToggleSign={toggleSign}
               onPercent={inputPercent}
             />
-          </div>
-        </div>
+          </Card>
+        </Col>
 
         {/* 右侧信息面板 */}
-        <div className="w-full space-y-4">
-          {/* 使用说明 */}
-          <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <p className="text-sm text-blue-800">
-              <strong>键盘快捷键:</strong> 数字键 0-9, 运算符 +−×÷,
-              Enter 键计算, Escape 清空, Backspace 删除
-            </p>
-          </div>
-
-          {/* 历史记录切换按钮 */}
-          <button
-            onClick={toggleHistory}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-primary-500 hover:bg-primary-600 text-white rounded-lg transition-colors"
-          >
-            <svg
-              className="w-5 h-5"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+        <Col xs={24} lg={14}>
+          <Row gutter={[16, 16]}>
+            {/* 使用说明 */}
+            <Col span={24}>
+              <Alert
+                message={
+                  <>
+                    <strong>键盘快捷键：</strong> 数字键 0-9, 运算符 +−×÷,
+                    Enter 键计算, Escape 清空, Backspace 删除
+                  </>
+                }
+                type="info"
+                showIcon
+                style={{ borderRadius: 8 }}
               />
-            </svg>
-            {showHistory ? '隐藏历史' : '显示历史'}
-          </button>
+            </Col>
 
-          {/* 历史记录面板 */}
-          {showHistory && (
-            <HistoryPanel
-              history={history}
-              onReplay={replayCalculation}
-              onClear={clearHistory}
-              onClose={toggleHistory}
-            />
-          )}
-        </div>
-      </div>
+            {/* 历史记录切换按钮 */}
+            <Col span={24}>
+              <Button
+                type="primary"
+                size="large"
+                icon={<HistoryOutlined />}
+                onClick={toggleHistory}
+                block
+              >
+                {showHistory ? '隐藏历史' : '显示历史'}
+              </Button>
+            </Col>
+
+            {/* 历史记录面板 */}
+            {showHistory && (
+              <Col span={24}>
+                <HistoryPanel
+                  history={history}
+                  onReplay={replayCalculation}
+                  onClear={clearHistory}
+                  onClose={toggleHistory}
+                />
+              </Col>
+            )}
+          </Row>
+        </Col>
+      </Row>
     </div>
   )
 }

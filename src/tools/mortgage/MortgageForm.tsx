@@ -1,4 +1,7 @@
+import { Card, InputNumber, Space, Button, Radio, Alert, Typography } from 'antd'
 import { useMortgageStore } from './mortgage.store'
+
+const { Text } = Typography
 
 export default function MortgageForm() {
   const {
@@ -25,126 +28,134 @@ export default function MortgageForm() {
   ]
 
   return (
-    <div className="bg-white rounded-xl shadow-lg p-6 space-y-6">
-      <h2 className="text-xl font-bold text-gray-800 mb-4">贷款参数</h2>
-
-      {/* 贷款总额 */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          贷款总额（万元）
-        </label>
-        <input
-          type="number"
-          value={loanAmount}
-          onChange={(e) => setLoanAmount(Number(e.target.value))}
-          min="1"
-          max="10000"
-          step="1"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-        />
-        <p className="text-xs text-gray-500 mt-1">建议范围：10-1000万元</p>
-      </div>
-
-      {/* 贷款期限 */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          贷款期限（年）
-        </label>
-        <div className="grid grid-cols-3 gap-2 mb-2">
-          {yearOptions.map((year) => (
-            <button
-              key={year}
-              onClick={() => setLoanYears(year)}
-              className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-                loanYears === year
-                  ? 'bg-primary-500 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              {year}年
-            </button>
-          ))}
+    <Card 
+      title="贷款参数" 
+      style={{ 
+        borderRadius: 8,
+        position: 'sticky',
+        top: 80,
+      }}
+    >
+      <Space direction="vertical" size="large" style={{ width: '100%' }}>
+        {/* 贷款总额 */}
+        <div>
+          <Text strong style={{ display: 'block', marginBottom: 8 }}>
+            贷款总额（万元）
+          </Text>
+          <InputNumber
+            value={loanAmount}
+            onChange={(value) => setLoanAmount(value || 0)}
+            min={1}
+            max={10000}
+            step={1}
+            style={{ width: '100%' }}
+            size="large"
+          />
+          <Text type="secondary" style={{ fontSize: 12, display: 'block', marginTop: 8 }}>
+            建议范围：10-1000万元
+          </Text>
         </div>
-        <input
-          type="number"
-          value={loanYears}
-          onChange={(e) => setLoanYears(Number(e.target.value))}
-          min="1"
-          max="30"
-          step="1"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-        />
-      </div>
 
-      {/* 年利率 */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          年利率（%）
-        </label>
-        <div className="space-y-2 mb-2">
-          {rateOptions.map((option) => (
-            <button
-              key={option.value}
-              onClick={() => setAnnualRate(option.value)}
-              className={`w-full px-3 py-2 rounded-lg text-sm text-left transition-colors ${
-                annualRate === option.value
-                  ? 'bg-primary-500 text-white'
-                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-              }`}
-            >
-              {option.label}
-            </button>
-          ))}
+        {/* 贷款期限 */}
+        <div>
+          <Text strong style={{ display: 'block', marginBottom: 8 }}>
+            贷款期限（年）
+          </Text>
+          <Space wrap>
+            {yearOptions.map((year) => (
+              <Button
+                key={year}
+                type={loanYears === year ? 'primary' : 'default'}
+                onClick={() => setLoanYears(year)}
+              >
+                {year}年
+              </Button>
+            ))}
+          </Space>
+          <InputNumber
+            value={loanYears}
+            onChange={(value) => setLoanYears(value || 0)}
+            min={1}
+            max={30}
+            step={1}
+            style={{ width: '100%', marginTop: 12 }}
+            size="large"
+          />
         </div>
-        <input
-          type="number"
-          value={annualRate}
-          onChange={(e) => setAnnualRate(Number(e.target.value))}
-          min="0.1"
-          max="20"
-          step="0.01"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-        />
-        <p className="text-xs text-gray-500 mt-1">可自定义输入利率</p>
-      </div>
 
-      {/* 还款方式 */}
-      <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          还款方式
-        </label>
-        <div className="grid grid-cols-2 gap-3">
-          <button
-            onClick={() => setRepaymentType('equal-payment')}
-            className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-              repaymentType === 'equal-payment'
-                ? 'bg-primary-500 text-white ring-2 ring-primary-600'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
+        {/* 年利率 */}
+        <div>
+          <Text strong style={{ display: 'block', marginBottom: 8 }}>
+            年利率（%）
+          </Text>
+          <Space direction="vertical" size="small" style={{ width: '100%', marginBottom: 12 }}>
+            {rateOptions.map((option) => (
+              <Button
+                key={option.value}
+                type={annualRate === option.value ? 'primary' : 'default'}
+                onClick={() => setAnnualRate(option.value)}
+                block
+              >
+                {option.label}
+              </Button>
+            ))}
+          </Space>
+          <InputNumber
+            value={annualRate}
+            onChange={(value) => setAnnualRate(value || 0)}
+            min={0.1}
+            max={20}
+            step={0.01}
+            style={{ width: '100%' }}
+            size="large"
+            precision={2}
+          />
+          <Text type="secondary" style={{ fontSize: 12, display: 'block', marginTop: 8 }}>
+            可自定义输入利率
+          </Text>
+        </div>
+
+        {/* 还款方式 */}
+        <div>
+          <Text strong style={{ display: 'block', marginBottom: 8 }}>
+            还款方式
+          </Text>
+          <Radio.Group
+            value={repaymentType}
+            onChange={(e) => setRepaymentType(e.target.value)}
+            style={{ width: '100%' }}
           >
-            <div className="font-bold">等额本息</div>
-            <div className="text-xs mt-1 opacity-90">每月还款额相同</div>
-          </button>
-          <button
-            onClick={() => setRepaymentType('equal-principal')}
-            className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-              repaymentType === 'equal-principal'
-                ? 'bg-primary-500 text-white ring-2 ring-primary-600'
-                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-            }`}
-          >
-            <div className="font-bold">等额本金</div>
-            <div className="text-xs mt-1 opacity-90">每月还款额递减</div>
-          </button>
+            <Space direction="vertical" style={{ width: '100%' }}>
+              <Radio value="equal-payment" style={{ width: '100%', padding: '12px', border: repaymentType === 'equal-payment' ? '2px solid #52c41a' : '2px solid #d9d9d9', borderRadius: 8, marginBottom: 8 }}>
+                <div>
+                  <Text strong>等额本息</Text>
+                  <br />
+                  <Text type="secondary" style={{ fontSize: 12 }}>
+                    每月还款额相同
+                  </Text>
+                </div>
+              </Radio>
+              <Radio value="equal-principal" style={{ width: '100%', padding: '12px', border: repaymentType === 'equal-principal' ? '2px solid #52c41a' : '2px solid #d9d9d9', borderRadius: 8 }}>
+                <div>
+                  <Text strong>等额本金</Text>
+                  <br />
+                  <Text type="secondary" style={{ fontSize: 12 }}>
+                    每月还款额递减
+                  </Text>
+                </div>
+              </Radio>
+            </Space>
+          </Radio.Group>
         </div>
-      </div>
 
-      {/* 说明信息 */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-        <p className="text-sm text-blue-800">
-          <strong>提示：</strong>等额本息每月还款额固定，适合收入稳定的人群；等额本金前期还款压力大，但总利息较少。
-        </p>
-      </div>
-    </div>
+        {/* 说明信息 */}
+        <Alert
+          message="提示"
+          description="等额本息每月还款额固定，适合收入稳定的人群；等额本金前期还款压力大，但总利息较少。"
+          type="info"
+          showIcon
+        />
+      </Space>
+    </Card>
   )
 }

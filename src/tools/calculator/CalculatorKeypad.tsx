@@ -1,3 +1,5 @@
+import { Button, Space } from 'antd'
+
 interface CalculatorKeypadProps {
   onDigit: (digit: string) => void
   onOperator: (operator: string) => void
@@ -19,68 +21,94 @@ export default function CalculatorKeypad({
   onToggleSign,
   onPercent,
 }: CalculatorKeypadProps) {
-  const Button = ({
+  const CalcButton = ({
     children,
     onClick,
-    className = '',
-    variant = 'default',
+    type = 'default',
+    style,
   }: {
     children: React.ReactNode
     onClick: () => void
-    className?: string
-    variant?: 'default' | 'operator' | 'function' | 'equals'
+    type?: 'default' | 'primary' | 'dashed'
+    style?: React.CSSProperties
   }) => {
-    const baseClasses = 'h-16 rounded-xl font-semibold text-lg transition-all duration-150 active:scale-95'
-    const variantClasses = {
-      default: 'bg-gray-200 hover:bg-gray-300 text-gray-900',
-      operator: 'bg-primary-500 hover:bg-primary-600 text-white',
-      function: 'bg-gray-300 hover:bg-gray-400 text-gray-700',
-      equals: 'bg-green-500 hover:bg-green-600 text-white',
-    }
-
     return (
-      <button
+      <Button
         onClick={onClick}
-        className={`${baseClasses} ${variantClasses[variant]} ${className}`}
+        type={type}
+        size="large"
+        style={{
+          height: 64,
+          fontSize: 20,
+          fontWeight: 'bold',
+          borderRadius: 8,
+          ...style,
+        }}
+        block
       >
         {children}
-      </button>
+      </Button>
     )
   }
 
+  const buttonRows = [
+    [
+      { label: 'AC', onClick: onClear, type: 'dashed' as const },
+      { label: '%', onClick: onPercent, type: 'dashed' as const },
+      { label: '⌫', onClick: onDelete, type: 'dashed' as const },
+      { label: '÷', onClick: () => onOperator('÷'), type: 'primary' as const },
+    ],
+    [
+      { label: '7', onClick: () => onDigit('7') },
+      { label: '8', onClick: () => onDigit('8') },
+      { label: '9', onClick: () => onDigit('9') },
+      { label: '×', onClick: () => onOperator('×'), type: 'primary' as const },
+    ],
+    [
+      { label: '4', onClick: () => onDigit('4') },
+      { label: '5', onClick: () => onDigit('5') },
+      { label: '6', onClick: () => onDigit('6') },
+      { label: '−', onClick: () => onOperator('-'), type: 'primary' as const },
+    ],
+    [
+      { label: '1', onClick: () => onDigit('1') },
+      { label: '2', onClick: () => onDigit('2') },
+      { label: '3', onClick: () => onDigit('3') },
+      { label: '+', onClick: () => onOperator('+'), type: 'primary' as const },
+    ],
+    [
+      { label: '±', onClick: onToggleSign, type: 'dashed' as const },
+      { label: '0', onClick: () => onDigit('0') },
+      { label: '.', onClick: onDecimal },
+      { label: '=', onClick: onEquals, type: 'primary' as const, style: { background: '#096dd9' } },
+    ],
+  ]
+
   return (
-    <div className="p-6 bg-gray-100 rounded-b-2xl">
-      <div className="grid grid-cols-4 gap-3">
-        {/* 第一行 */}
-        <Button onClick={onClear} variant="function">AC</Button>
-        <Button onClick={onPercent} variant="function">%</Button>
-        <Button onClick={onDelete} variant="function">⌫</Button>
-        <Button onClick={() => onOperator('÷')} variant="operator">÷</Button>
-
-        {/* 第二行 */}
-        <Button onClick={() => onDigit('7')}>7</Button>
-        <Button onClick={() => onDigit('8')}>8</Button>
-        <Button onClick={() => onDigit('9')}>9</Button>
-        <Button onClick={() => onOperator('×')} variant="operator">×</Button>
-
-        {/* 第三行 */}
-        <Button onClick={() => onDigit('4')}>4</Button>
-        <Button onClick={() => onDigit('5')}>5</Button>
-        <Button onClick={() => onDigit('6')}>6</Button>
-        <Button onClick={() => onOperator('-')} variant="operator">−</Button>
-
-        {/* 第四行 */}
-        <Button onClick={() => onDigit('1')}>1</Button>
-        <Button onClick={() => onDigit('2')}>2</Button>
-        <Button onClick={() => onDigit('3')}>3</Button>
-        <Button onClick={() => onOperator('+')} variant="operator">+</Button>
-
-        {/* 第五行 */}
-        <Button onClick={onToggleSign} variant="function">±</Button>
-        <Button onClick={() => onDigit('0')}>0</Button>
-        <Button onClick={onDecimal}>.</Button>
-        <Button onClick={onEquals} variant="equals">=</Button>
-      </div>
+    <div style={{ padding: 24, background: '#e6f7ff', borderRadius: '0 0 16px 16px' }}>
+      <Space direction="vertical" size={12} style={{ width: '100%' }}>
+        {buttonRows.map((row, rowIndex) => (
+          <div
+            key={rowIndex}
+            style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(4, 1fr)',
+              gap: 12,
+            }}
+          >
+            {row.map((button, btnIndex) => (
+              <CalcButton
+                key={btnIndex}
+                onClick={button.onClick}
+                type={button.type}
+                style={'style' in button ? button.style : undefined}
+              >
+                {button.label}
+              </CalcButton>
+            ))}
+          </div>
+        ))}
+      </Space>
     </div>
   )
 }
