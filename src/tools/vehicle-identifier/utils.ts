@@ -224,7 +224,12 @@ export async function recognizeVehicleByVin(vin: string): Promise<VehicleResult>
       throw new Error(data.msg || data.error || '查询失败')
     }
 
-    return parseVehicleResult(data.data, vin)
+    // 处理 data.data 可能是 string 或 VinResultData 的情况
+    const resultData: VinResultData = typeof data.data === 'string'
+      ? { vin: data.data }
+      : data.data
+
+    return parseVehicleResult(resultData, vin)
   } catch (error) {
     console.error('VIN码查询失败:', error)
     // 提供更友好的错误信息
