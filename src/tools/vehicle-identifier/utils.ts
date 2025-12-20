@@ -10,10 +10,9 @@ import {
 const API_CONFIG = {
   username: import.meta.env.VITE_17VIN_USERNAME || 'kzcf',
   password: import.meta.env.VITE_17VIN_PASSWORD || 'kz06cf',
-  // 开发环境使用代理，生产环境使用直接URL
-  apiUrl: import.meta.env.DEV 
-    ? '/api/17vin' 
-    : (import.meta.env.VITE_17VIN_API_URL || 'http://api.17vin.com:8080'),
+  // 统一使用 /api/17vin 路径，由 Vite 代理（开发）或 Vercel Function（生产）处理
+  // 这样可以避免生产环境的 CORS 和混合内容（Mixed Content）问题
+  apiUrl: '/api/17vin',
 }
 
 /**
