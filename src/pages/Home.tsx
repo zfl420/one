@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Card, Typography, Space, Divider } from 'antd'
 import { ClockCircleOutlined } from '@ant-design/icons'
+import packageJson from '../../package.json'
 
 const { Title, Text } = Typography
 
@@ -64,9 +65,14 @@ export default function Home() {
             >
               one
             </Title>
-            <Text type="secondary" style={{ fontSize: 20 }}>
-              简洁、优雅、现代
-            </Text>
+            <Space>
+              <Text type="secondary" style={{ fontSize: 20 }}>
+                简洁、优雅、现代
+              </Text>
+              <Text type="secondary" style={{ fontSize: 16 }}>
+                v{packageJson.version}
+              </Text>
+            </Space>
           </Space>
 
           {/* 北京时间显示 */}
