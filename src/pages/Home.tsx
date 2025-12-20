@@ -15,28 +15,30 @@ export default function Home() {
     return () => clearInterval(timer)
   }, [])
 
-  const getTimeComponents = (date: Date) => {
-    const beijingDate = new Date(date.toLocaleString('en-US', { timeZone: 'Asia/Shanghai' }))
-    
-    return {
-      date: beijingDate.toLocaleDateString('zh-CN', {
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-      }),
-      time: beijingDate.toLocaleTimeString('zh-CN', {
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: false,
-      }),
-      weekday: beijingDate.toLocaleDateString('zh-CN', {
-        weekday: 'long',
-      }),
-    }
-  }
+  const formatOptions = {
+    timeZone: 'Asia/Shanghai',
+    locale: 'zh-CN',
+  } as const
 
-  const { date, time, weekday } = getTimeComponents(currentTime)
+  const date = currentTime.toLocaleDateString('zh-CN', {
+    ...formatOptions,
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+  })
+
+  const time = currentTime.toLocaleTimeString('zh-CN', {
+    ...formatOptions,
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: false,
+  })
+
+  const weekday = currentTime.toLocaleDateString('zh-CN', {
+    ...formatOptions,
+    weekday: 'long',
+  })
 
   return (
     <div

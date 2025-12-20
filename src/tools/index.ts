@@ -1,4 +1,4 @@
-import { ToolConfig } from './types'
+import { ToolConfig } from '../types'
 import Calculator from './calculator/Calculator'
 import VehicleIdentifier from './vehicle-identifier/VehicleIdentifier'
 import Mortgage from './mortgage/Mortgage'
@@ -54,4 +54,4 @@ export const tools: ToolConfig[] = [
   // 未来添加新工具只需在此注册
 ]
 
-export { type ToolConfig } from './types'
+export { type ToolConfig } from '../types'

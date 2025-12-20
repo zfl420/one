@@ -70,7 +70,7 @@
 - [x] React 组件化开发
 - [x] TypeScript 类型安全
 - [x] Zustand 状态管理
-- [x] Tailwind CSS 样式
+- [x] Ant Design 样式
 - [x] 响应式设计
 
 ### 图片处理

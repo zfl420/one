@@ -21,36 +21,6 @@ export default function CalculatorKeypad({
   onToggleSign,
   onPercent,
 }: CalculatorKeypadProps) {
-  const CalcButton = ({
-    children,
-    onClick,
-    type = 'default',
-    style,
-  }: {
-    children: React.ReactNode
-    onClick: () => void
-    type?: 'default' | 'primary' | 'dashed'
-    style?: React.CSSProperties
-  }) => {
-    return (
-      <Button
-        onClick={onClick}
-        type={type}
-        size="large"
-        style={{
-          height: 64,
-          fontSize: 20,
-          fontWeight: 'bold',
-          borderRadius: 8,
-          ...style,
-        }}
-        block
-      >
-        {children}
-      </Button>
-    )
-  }
-
   const buttonRows = [
     [
       { label: 'AC', onClick: onClear, type: 'dashed' as const },
@@ -97,14 +67,22 @@ export default function CalculatorKeypad({
             }}
           >
             {row.map((button, btnIndex) => (
-              <CalcButton
+              <Button
                 key={btnIndex}
                 onClick={button.onClick}
                 type={button.type}
-                style={'style' in button ? button.style : undefined}
+                size="large"
+                block
+                style={{
+                  height: 64,
+                  fontSize: 20,
+                  fontWeight: 'bold',
+                  borderRadius: 8,
+                  ...('style' in button ? button.style : {}),
+                }}
               >
                 {button.label}
-              </CalcButton>
+              </Button>
             ))}
           </div>
         ))}

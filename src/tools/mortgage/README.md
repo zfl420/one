@@ -37,7 +37,7 @@
 - React + TypeScript
 - Zustand（状态管理）
 - Recharts（图表库）
-- Tailwind CSS（样式）
+- Ant Design（样式）
 
 ### 文件结构
 ```

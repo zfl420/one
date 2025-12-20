@@ -16,7 +16,7 @@
 - **前端框架**: React 18 + TypeScript
 - **构建工具**: Vite
 - **状态管理**: Zustand
-- **样式方案**: Tailwind CSS
+- **样式方案**: Ant Design
 - **路由**: React Router v6
 
 ## 📦 安装
@@ -101,12 +101,16 @@ One/
 
 ```typescript
 // src/tools/json-formatter/JsonFormatter.tsx
+import { Card, Typography } from 'antd'
+
+const { Title } = Typography
+
 export default function JsonFormatter() {
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">JSON 格式化</h1>
+    <Card style={{ maxWidth: 1200, margin: '0 auto', padding: 24 }}>
+      <Title level={2}>JSON 格式化</Title>
       {/* 你的工具 UI */}
-    </div>
+    </Card>
   )
 }
 ```

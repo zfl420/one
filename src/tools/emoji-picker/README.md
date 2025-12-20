@@ -58,7 +58,7 @@
 - **React 18** - UI框架
 - **TypeScript** - 类型安全
 - **Zustand** - 状态管理
-- **TailwindCSS** - 样式
+- **Ant Design** - 样式
 - **unicode-emoji-json** - Emoji数据源
 
 ### 文件结构
