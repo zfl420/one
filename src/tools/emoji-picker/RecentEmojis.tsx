@@ -2,10 +2,10 @@ import { Card, Button } from 'antd'
 import { ClockCircleOutlined, DeleteOutlined } from '@ant-design/icons'
 import { useEmojiPickerStore } from './emoji-picker.store'
 import { copyToClipboard } from './utils'
+import { toast } from '../../utils/toast'
 
 export default function RecentEmojis() {
-  const { recentEmojis, addRecentEmoji, showCopySuccess, clearRecentEmojis } =
-    useEmojiPickerStore()
+  const { recentEmojis, addRecentEmoji, clearRecentEmojis } = useEmojiPickerStore()
 
   if (recentEmojis.length === 0) {
     return null
@@ -15,7 +15,15 @@ export default function RecentEmojis() {
     const success = await copyToClipboard(emoji)
     if (success) {
       addRecentEmoji(emoji)
-      showCopySuccess(emoji)
+      toast.success(
+        <span>
+          <span style={{ fontSize: 24, marginRight: 8 }}>{emoji}</span>
+          已复制到剪贴板
+        </span>,
+        2
+      )
+    } else {
+      toast.error('复制失败，请重试')
     }
   }
 

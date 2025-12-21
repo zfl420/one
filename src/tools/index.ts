@@ -1,9 +1,13 @@
+import { lazy } from 'react'
 import { ToolConfig } from '../types'
-import Calculator from './calculator/Calculator'
-import VehicleIdentifier from './vehicle-identifier/VehicleIdentifier'
-import Mortgage from './mortgage/Mortgage'
-import ImageCompressor from './image-compressor/ImageCompressor'
-import EmojiPicker from './emoji-picker/EmojiPicker'
+
+// 懒加载工具组件
+const Calculator = lazy(() => import('./calculator/Calculator'))
+const VehicleIdentifier = lazy(() => import('./vehicle-identifier/VehicleIdentifier'))
+const Mortgage = lazy(() => import('./mortgage/Mortgage'))
+const ImageCompressor = lazy(() => import('./image-compressor/ImageCompressor'))
+const EmojiPicker = lazy(() => import('./emoji-picker/EmojiPicker'))
+const SchoolDistrictMap = lazy(() => import('./school-district-map/SchoolDistrictMap'))
 
 export const tools: ToolConfig[] = [
   {
@@ -50,6 +54,15 @@ export const tools: ToolConfig[] = [
     component: EmojiPicker,
     route: '/tools/emoji-picker',
     description: '完整的Emoji表情大全，支持搜索、分类浏览、肤色选择和一键复制',
+  },
+  {
+    id: 'school-district-map',
+    name: '杭州学区地图',
+    category: 'other',
+    icon: '🗺️',
+    component: SchoolDistrictMap,
+    route: '/tools/school-district-map',
+    description: '杭州学区地图工具，支持绘制学区区域、搜索小区、查看学区信息',
   },
   // 未来添加新工具只需在此注册
 ]

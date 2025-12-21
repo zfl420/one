@@ -1,3 +1,7 @@
+import { logger } from '../../utils/logger'
+import { STORAGE_KEYS, MAX_HISTORY_ITEMS } from '../../constants/storage'
+import { storageManager } from '../../utils/storage'
+
 // 复制emoji到剪贴板
 export async function copyToClipboard(emoji: string): Promise<boolean> {
   try {
@@ -19,7 +23,7 @@ export async function copyToClipboard(emoji: string): Promise<boolean> {
       return result
     }
   } catch (error) {
-    console.error('复制失败:', error)
+    logger.error('复制失败:', error)
     return false
   }
 }
@@ -47,50 +51,33 @@ export function getSkinToneVariant(baseEmoji: string, toneIndex: number): string
 
 // 从localStorage加载最近使用的emoji
 export function loadRecentEmojis(): string[] {
-  try {
-    const stored = localStorage.getItem('recent-emojis')
-    if (stored) {
-      return JSON.parse(stored)
-    }
-  } catch (error) {
-    console.error('加载最近使用的emoji失败:', error)
-  }
-  return []
+  return storageManager.get<string[]>(STORAGE_KEYS.RECENT_EMOJIS, [])
 }
 
 // 保存emoji到最近使用列表
 export function saveRecentEmoji(emoji: string): string[] {
-  try {
-    let recentEmojis = loadRecentEmojis()
-    
-    // 移除重复的emoji
-    recentEmojis = recentEmojis.filter((e) => e !== emoji)
-    
-    // 添加到开头
-    recentEmojis.unshift(emoji)
-    
-    // 只保留最近20个
-    if (recentEmojis.length > 20) {
-      recentEmojis = recentEmojis.slice(0, 20)
-    }
-    
-    // 保存到localStorage
-    localStorage.setItem('recent-emojis', JSON.stringify(recentEmojis))
-    
-    return recentEmojis
-  } catch (error) {
-    console.error('保存最近使用的emoji失败:', error)
-    return []
+  let recentEmojis = loadRecentEmojis()
+  
+  // 移除重复的emoji
+  recentEmojis = recentEmojis.filter((e) => e !== emoji)
+  
+  // 添加到开头
+  recentEmojis.unshift(emoji)
+  
+  // 只保留最近N个
+  if (recentEmojis.length > MAX_HISTORY_ITEMS.EMOJI) {
+    recentEmojis = recentEmojis.slice(0, MAX_HISTORY_ITEMS.EMOJI)
   }
+  
+  // 保存到localStorage
+  storageManager.set(STORAGE_KEYS.RECENT_EMOJIS, recentEmojis)
+  
+  return recentEmojis
 }
 
 // 清空最近使用的emoji
 export function clearRecentEmojis(): void {
-  try {
-    localStorage.removeItem('recent-emojis')
-  } catch (error) {
-    console.error('清空最近使用的emoji失败:', error)
-  }
+  storageManager.remove(STORAGE_KEYS.RECENT_EMOJIS)
 }
 
 // 检查emoji是否支持肤色变体

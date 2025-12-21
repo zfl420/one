@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { CalculationHistory } from '../../types'
-import { storage } from '../../utils/storage'
+import { calculatorStorage } from '../../utils/storage'
 
 interface CalculatorState {
   // 显示值
@@ -124,7 +124,7 @@ export const useCalculatorStore = create<CalculatorState>((set, get) => ({
     const resultStr = result.toString()
 
     // 保存到历史记录
-    storage.addHistoryItem({
+    calculatorStorage.addHistoryItem({
       expression: fullExpression,
       result: resultStr,
     })
@@ -135,7 +135,7 @@ export const useCalculatorStore = create<CalculatorState>((set, get) => ({
       previousValue: null,
       operator: null,
       shouldResetDisplay: true,
-      history: storage.getHistory(),
+      history: calculatorStorage.getHistory(),
     })
   },
 
@@ -173,11 +173,11 @@ export const useCalculatorStore = create<CalculatorState>((set, get) => ({
   },
 
   loadHistory: () => {
-    set({ history: storage.getHistory() })
+    set({ history: calculatorStorage.getHistory() })
   },
 
   clearHistory: () => {
-    storage.clearHistory()
+    calculatorStorage.clearHistory()
     set({ history: [] })
   },
 

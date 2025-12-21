@@ -10,6 +10,7 @@ import {
   recognizeVehicleByVin,
   generateId,
 } from './utils'
+import { logger } from '../../utils/logger'
 
 interface VehicleIdentifierState {
   // 输入模式
@@ -107,9 +108,8 @@ export const useVehicleIdentifierStore = create<VehicleIdentifierState>()(
         try {
           const result = await recognizeVehicleByImage(uploadedImage)
           
-          // 调试：打印识别结果
-          console.log('Store收到的识别结果:', result)
-          console.log('Store收到的VIN码:', result.vin)
+          logger.debug('Store收到的识别结果:', result)
+          logger.debug('Store收到的VIN码:', result.vin)
           
           // 添加到历史记录
           const record: VehicleRecord = {

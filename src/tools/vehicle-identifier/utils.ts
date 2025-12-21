@@ -5,6 +5,7 @@ import {
   VehicleResult,
   VinResultData,
 } from './types'
+import { logger } from '../../utils/logger'
 
 // 从环境变量获取配置
 const API_CONFIG = {
@@ -120,7 +121,7 @@ export async function recognizeVehicleByImage(
       throw new Error(error)
     }
 
-    console.log('========== 第1步：识别VIN码 ==========')
+    logger.debug('========== 第1步：识别VIN码 ==========')
     
     // 第1步：先用vin_ocr接口识别VIN码
     const ocrBusinessParams = {
@@ -149,7 +150,7 @@ export async function recognizeVehicleByImage(
     }
 
     const ocrData: VinApiResponse = await ocrResponse.json()
-    console.log('OCR识别响应:', ocrData)
+    logger.debug('OCR识别响应:', ocrData)
 
     if (ocrData.code !== 1 || !ocrData.data) {
       throw new Error(ocrData.msg || ocrData.error || 'VIN码识别失败')
@@ -157,18 +158,18 @@ export async function recognizeVehicleByImage(
 
     // 提取VIN码（3002接口返回的data直接就是VIN码字符串）
     const vinCode = typeof ocrData.data === 'string' ? ocrData.data : (ocrData.data as any).vin || ''
-    console.log('识别出的VIN码:', vinCode)
+    logger.debug('识别出的VIN码:', vinCode)
 
     if (!vinCode || vinCode.length !== 17) {
       throw new Error('识别的VIN码格式不正确')
     }
 
-    console.log('========== 第2步：查询车型信息 ==========')
+    logger.debug('========== 第2步：查询车型信息 ==========')
     
     // 第2步：用识别出的VIN码查询车型
     return await recognizeVehicleByVin(vinCode)
   } catch (error) {
-    console.error('车型识别失败:', error)
+    logger.error('车型识别失败:', error)
     // 提供更友好的错误信息
     if (error instanceof TypeError && error.message.includes('fetch')) {
       throw new Error('网络连接失败，请检查网络或API服务是否可用')
@@ -230,7 +231,7 @@ export async function recognizeVehicleByVin(vin: string): Promise<VehicleResult>
 
     return parseVehicleResult(resultData, vin)
   } catch (error) {
-    console.error('VIN码查询失败:', error)
+    logger.error('VIN码查询失败:', error)
     // 提供更友好的错误信息
     if (error instanceof TypeError && error.message.includes('fetch')) {
       throw new Error('网络连接失败，请检查网络或API服务是否可用')
@@ -248,7 +249,7 @@ function parseVehicleResult(data: VinResultData, vinCode?: string): VehicleResul
   // 使用传入的VIN码，如果没有则从data中获取
   const finalVin = vinCode || data.vin || ''
   
-  console.log('parseVehicleResult - 最终VIN码:', finalVin)
+  logger.debug('parseVehicleResult - 最终VIN码:', finalVin)
 
   return {
     vin: finalVin,

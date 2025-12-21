@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { Card, List, Button, Empty, Typography, Space } from 'antd'
 import { DeleteOutlined, CloseOutlined, ClockCircleOutlined } from '@ant-design/icons'
 import { CalculationHistory } from '../../types'
@@ -11,7 +12,12 @@ interface HistoryPanelProps {
   onClose: () => void
 }
 
-export default function HistoryPanel({ history, onReplay, onClear, onClose }: HistoryPanelProps) {
+const HistoryPanel = memo(function HistoryPanel({
+  history,
+  onReplay,
+  onClear,
+  onClose,
+}: HistoryPanelProps) {
   return (
     <Card
       title={
@@ -91,4 +97,6 @@ export default function HistoryPanel({ history, onReplay, onClear, onClose }: Hi
       )}
     </Card>
   )
-}
+})
+
+export default HistoryPanel

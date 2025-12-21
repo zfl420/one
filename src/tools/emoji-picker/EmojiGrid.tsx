@@ -3,6 +3,7 @@ import { SmileOutlined } from '@ant-design/icons'
 import { EmojiCategory } from './types'
 import { useEmojiPickerStore } from './emoji-picker.store'
 import { copyToClipboard, getSkinToneVariant, supportsSkinTone } from './utils'
+import { toast } from '../../utils/toast'
 
 const { Title, Text } = Typography
 
@@ -11,7 +12,7 @@ interface EmojiGridProps {
 }
 
 export default function EmojiGrid({ categories }: EmojiGridProps) {
-  const { selectedSkinTone, addRecentEmoji, showCopySuccess } = useEmojiPickerStore()
+  const { selectedSkinTone, addRecentEmoji } = useEmojiPickerStore()
 
   const handleEmojiClick = async (emoji: string) => {
     // 应用肤色变体（如果支持且已选择）
@@ -23,7 +24,15 @@ export default function EmojiGrid({ categories }: EmojiGridProps) {
     const success = await copyToClipboard(finalEmoji)
     if (success) {
       addRecentEmoji(finalEmoji)
-      showCopySuccess(finalEmoji)
+      toast.success(
+        <span>
+          <span style={{ fontSize: 24, marginRight: 8 }}>{finalEmoji}</span>
+          已复制到剪贴板
+        </span>,
+        2
+      )
+    } else {
+      toast.error('复制失败，请重试')
     }
   }
 

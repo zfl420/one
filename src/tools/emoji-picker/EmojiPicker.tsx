@@ -7,7 +7,6 @@ import CategoryNav from './CategoryNav'
 import SkinTonePicker from './SkinTonePicker'
 import RecentEmojis from './RecentEmojis'
 import EmojiGrid from './EmojiGrid'
-import CopyToast from './CopyToast'
 
 const { Text } = Typography
 
@@ -78,9 +77,6 @@ export default function EmojiPicker() {
           </Col>
         </Row>
       </div>
-
-      {/* 复制成功提示 */}
-      <CopyToast />
     </div>
   )
 }

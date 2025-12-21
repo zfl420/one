@@ -3,7 +3,6 @@ import { Menu, Drawer, Typography } from 'antd'
 import type { MenuProps } from 'antd'
 import { useEffect, useRef } from 'react'
 import { tools } from '../../tools'
-import packageJson from '../../../package.json'
 import Logo from '../Logo'
 
 const { Text } = Typography
@@ -49,7 +48,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       window.removeEventListener('resize', updateWidth)
       observer.disconnect()
     }
-  }, [tools, location.pathname]) // 当工具列表或路径变化时重新计算
+  }, [location.pathname]) // 只在路径变化时重新计算，tools 是常量不需要作为依赖
 
   // 将工具列表转换为 Menu items
   const menuItems: MenuProps['items'] = tools.map((tool) => ({
@@ -89,7 +88,7 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       }}
     >
       <Text type="secondary" style={{ fontSize: 12 }}>
-        v{packageJson.version}
+        v{__APP_VERSION__}
       </Text>
     </div>
   )

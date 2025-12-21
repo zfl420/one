@@ -1,0 +1,31 @@
+import { useEffect, RefObject } from 'react'
+
+/**
+ * 检测点击外部区域的 Hook
+ * @param ref - 要检测的元素 ref
+ * @param handler - 点击外部时执行的回调
+ */
+export function useClickOutside<T extends HTMLElement = HTMLElement>(
+  ref: RefObject<T>,
+  handler: (event: MouseEvent | TouchEvent) => void
+): void {
+  useEffect(() => {
+    const listener = (event: MouseEvent | TouchEvent) => {
+      const el = ref?.current
+      if (!el || el.contains((event?.target as Node) || null)) {
+        return
+      }
+
+      handler(event)
+    }
+
+    document.addEventListener('mousedown', listener)
+    document.addEventListener('touchstart', listener)
+
+    return () => {
+      document.removeEventListener('mousedown', listener)
+      document.removeEventListener('touchstart', listener)
+    }
+  }, [ref, handler])
+}
+
