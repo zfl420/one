@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, Form, Input, Radio, message } from 'antd'
+import { Modal, Form, Input, Radio } from 'antd'
 import { DistrictType } from './types'
 
 const { TextArea } = Input

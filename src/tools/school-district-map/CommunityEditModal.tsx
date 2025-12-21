@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Modal, List, AutoComplete, Input, Button, message, Empty, Popconfirm } from 'antd'
 import { DeleteOutlined, PlusOutlined, SearchOutlined } from '@ant-design/icons'
 import { useSchoolDistrictMapStore } from './school-district-map.store'
