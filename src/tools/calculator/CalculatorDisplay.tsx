@@ -7,7 +7,7 @@ export default function CalculatorDisplay({ expression, value }: CalculatorDispl
   return (
     <div
       style={{
-        background: 'linear-gradient(135deg, #1890ff 0%, #096dd9 100%)',
+        background: 'linear-gradient(135deg, #ff4d4f 0%, #cf1322 100%)',
         color: '#fff',
         padding: '40px 32px',
         borderRadius: '16px 16px 0 0',

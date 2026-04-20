@@ -1,5 +1,7 @@
 # One - 在线工具集合
 
+**线上地址**: https://one.52cons.com/
+
 一个简洁实用的在线工具网站，采用现代化技术栈构建，易于扩展。
 
 ## ✨ 特性
@@ -25,7 +27,7 @@
 
 ```bash
 # 克隆项目
-git clone <your-repo-url>
+git clone https://github.com/zfl420/one.git
 cd One
 
 # 安装依赖
